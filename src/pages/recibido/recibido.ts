@@ -1,6 +1,6 @@
 import {Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {
-  ActionSheetController, AlertController, IonicPage, LoadingController, ModalController, NavController,
+  ActionSheetController, AlertController, FabContainer, IonicPage, LoadingController, ModalController, NavController,
   NavParams, ToastController
 } from 'ionic-angular';
 import {Ambientes, ResponseExistences} from "../response/response-existences";
@@ -11,6 +11,7 @@ import {ArticuloPedido, RequestPedido, ResponsePedido} from "../request/request-
 import {DataShareProvider} from "../../providers/data-share/data-share";
 import {SicServiceProvider} from "../../providers/sic-service/sic-service";
 import {ModalRecibidoPage} from "../modal-recibido/modal-recibido";
+import {TokenProvider} from "../../providers/token/token";
 
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
@@ -76,9 +77,77 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   @ViewChild('idTxtPrecZonLib') idTxtPrecZonLib;
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController, private sicService: SicServiceProvider, public toastCtrl: ToastController,
-              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider){
+              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider,
+              public tokenService:TokenProvider
+  ){
+    console.log("***********************************")
+    console.log(this.tokenService.get());
+    this.subscription = this.sharedService.getData().subscribe(data => {
+      if (data != null) {
+        var valor = JSON.stringify(data);
+        if (valor != null) {
+          this.toDatosPedidos(valor);
+        }
+      }
+    });
   }
+  public toDatosPedidos(data: string) {
+    if (data != null) {
+      var jsonData: any = new Object();
+      //try{
+      jsonData = JSON.parse(data);
+      this.jsonConvert = jsonData;
+      console.log("JSON DATA");
 
+      this.obtenerString();
+    }
+  }
+  public obtenerString() {
+    if(this.jsonConvert.id == 0){
+      this.iniciarNuevoPedido();
+    }else {
+      this.idPedidoRecuperado = this.jsonConvert.id;
+      this.txtFechaConvert = this.jsonConvert.fechaMovimiento;
+      this.txtNumMovimiento = this.jsonConvert.nroMovimiento;
+      this.txtCodProveedor = this.jsonConvert.codigo;
+      //this.infoProveedor();
+      this.txtDescripcion = this.jsonConvert.observacion;
+      this.listadoInPedidos = [];
+      for (let articulo of this.jsonConvert.lista) {
+        this.listadoInPedidos.push(new ArticuloPedido(articulo.id, articulo.codigoArticulo, articulo.cantidad, articulo.precio, articulo.observacion));
+
+        this.txtCantidadTotal = (this.txtCantidadTotal * 1) + (articulo.cantidad * 1);
+        this.txtPrecioTotal = (articulo.cantidad * articulo.precio) + (this.txtPrecioTotal * 1);
+      }
+      this.listadoInPedidos = this.listadoInPedidos.reverse();
+    }
+  }
+  public iniciarNuevoPedido(fab?: FabContainer) {
+    if(fab!=null) {
+      fab.close();
+    }
+
+    //this.BuscarPedido();
+    //this.txtNumMovimiento = 12312; //TODO: obtener los valores
+    this.txtFecha = new Date();
+    if (!this.txtFechaConvert) {
+      this.txtFechaConvert = new Date(this.txtFecha).toISOString();
+    }
+    this.idPedidoRecuperado = null;
+    this.txtDescripcion = '';
+    this.txtCodProveedor = '';
+    this.txtNomProveedor = '';
+    this.txtCodArticulo = '';
+    this.txtCantidadCompra = null;
+    this.txtPrecZonLib = null;
+    this.txtDescripcion2 = "";
+    this.txtCantidadTotal = 0;
+    this.txtPrecioTotal = 0;
+    this.listadoInPedidos = [];
+    setTimeout(() => {
+      this.idTxtProveedor.setFocus();
+    },400);
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad RecibidoPage');
   }
@@ -149,7 +218,7 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
           this.listaPedidos = data;
           this.navCtrl.push(ModalRecibidoPage, {
             detallePedidos: this.listaPedidos,
-            tipoPeticion: 0
+            tipoPeticion: 1
           });
         } else {
           this.presentToast('No se pudo recuperar los datos solicitados.');
@@ -187,7 +256,7 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
           this.listaPedidos = data;
           this.navCtrl.push(ModalRecibidoPage, {
             detallePedidos: this.listaPedidos,
-            tipoPeticion: 1
+            tipoPeticion: 0
           });
         } else {
           this.presentToast('No se pudo recuperar los datos solicitados.');

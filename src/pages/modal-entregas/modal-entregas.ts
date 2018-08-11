@@ -53,7 +53,7 @@ export class ModalEntregasPage implements OnDestroy, OnInit {
     this.tipoPeticion = navParams.get('tipoPeticion');
 
     if(this.tipoPeticion == 0){
-      this.titulo = "Articulos Enviados"
+      this.titulo = "Articulos Entregados"
     }else{
       this.titulo = "Llegada de Articulos"
     }
@@ -137,9 +137,9 @@ export class ModalEntregasPage implements OnDestroy, OnInit {
   }
 
   public listarArticulos(item: ArticulosPedidosGet[], id: number, articuloSolicitado: DatosPedidos) {
-    if(this.tipoPeticion == 0){
-      this.sharedService.setData(articuloSolicitado);
-    }
+    console.log("Listar Articulos")
+    this.sharedService.setData(articuloSolicitado);
+
 
     this.precioTotalPedido = 0;
     this.cantidadTotalPedido = 0;
@@ -527,6 +527,7 @@ export class ModalEntregasPage implements OnDestroy, OnInit {
     listaPedidosLocal = this.listaPedidos.list.filter(item => item.codigo == datosPedido);
 
     this.listaPedidos.list = listaPedidosLocal;
+    console.log("Filtrar codigo")
     console.log(this.strDetallePedidos)
     this.limpiarPedidos();
     this.detallePedidos();

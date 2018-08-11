@@ -21,6 +21,7 @@ import {RequestPedidosLista} from "../request/RequestPedidosLista";
 import {Ambientes, ResponseExistences} from "../response/response-existences";
 import {ModalEntregasPage} from "../modal-entregas/modal-entregas";
 import {environment} from "../../app/enviroment";
+import {TokenProvider} from "../../providers/token/token";
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
 var PHE = require("print-html-element");
@@ -83,8 +84,18 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   @ViewChild('idTxtPrecZonLib') idTxtPrecZonLib;
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController, private sicService: SicServiceProvider, public toastCtrl: ToastController,
-              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider) {
-
+              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider,
+              public tokenService:TokenProvider) {
+    console.log("***********************************")
+    console.log(this.tokenService.get());
+    this.subscription = this.sharedService.getData().subscribe(data => {
+      if (data != null) {
+        var valor = JSON.stringify(data);
+        if (valor != null) {
+          this.toDatosPedidos(valor);
+        }
+      }
+    });
   }
   ngOnDestroy(): void {
   }
@@ -97,6 +108,38 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
 
   ngDoCheck(): void {
   }
+  public toDatosPedidos(data: string) {
+    if (data != null) {
+      var jsonData: any = new Object();
+      //try{
+      jsonData = JSON.parse(data);
+      this.jsonConvert = jsonData;
+      console.log("JSON DATA");
+
+      this.obtenerString();
+    }
+  }
+  public obtenerString() {
+    if(this.jsonConvert.id == 0){
+      this.iniciarNuevoPedido();
+    }else {
+      this.idPedidoRecuperado = this.jsonConvert.id;
+      this.txtFechaConvert = this.jsonConvert.fechaMovimiento;
+      this.txtNumMovimiento = this.jsonConvert.nroMovimiento;
+      this.txtCodProveedor = this.jsonConvert.codigo;
+      this.infoProveedor();
+      this.txtDescripcion = this.jsonConvert.observacion;
+      this.listadoInPedidos = [];
+      for (let articulo of this.jsonConvert.lista) {
+        this.listadoInPedidos.push(new ArticuloPedido(articulo.id, articulo.codigoArticulo, articulo.cantidad, articulo.precio, articulo.observacion));
+
+        this.txtCantidadTotal = (this.txtCantidadTotal * 1) + (articulo.cantidad * 1);
+        this.txtPrecioTotal = (articulo.cantidad * articulo.precio) + (this.txtPrecioTotal * 1);
+      }
+      this.listadoInPedidos = this.listadoInPedidos.reverse();
+    }
+  }
+
   ionViewDidEnter(){
     Mousetrap.bindGlobal(['command+g', 'ctrl+g'], () => {
       this.confirmarAccion(null)
