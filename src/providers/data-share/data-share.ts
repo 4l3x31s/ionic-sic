@@ -15,7 +15,7 @@ export class DataShareProvider {
 
   private subject = new Subject<any>();
   private utilSubject = new Subject<any>();
-  constructor(public http: Http) {
+  constructor() {
 
   }
 

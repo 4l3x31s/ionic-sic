@@ -5,7 +5,7 @@ import {SicServiceProvider} from "../../providers/sic-service/sic-service";
 import {Device} from '@ionic-native/device';
 import {RequestLogin} from "../request/request-login";
 import {ResponseLogin} from "../response/response-login";
-import {TokenShareProvider} from "../../providers/token-share/token-share";
+import {TokenProvider} from "../../providers/token/token";
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
 /**
@@ -27,7 +27,7 @@ export class LoginPage {
   appKey = "12e23o33e488x033o";
   constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController,
               private sicService: SicServiceProvider, public loadingCtrl: LoadingController,
-              public alertCtrl: AlertController, private device: Device,public tokenShare: TokenShareProvider) {
+              public alertCtrl: AlertController, private device: Device, public tokenService:TokenProvider) {
     menu.enable(false);
 
   }
@@ -42,7 +42,6 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
   }
   iniciaSesion(){
-    //this.navCtrl.
     const loading = this.loadingCtrl.create({
       content: 'Iniciando Sessión'
     });
@@ -54,7 +53,8 @@ export class LoginPage {
       loading.dismiss();
       let alert;
       if(data.respuesta){
-        this.tokenShare.setData(data);
+        this.tokenService.setData(data);
+        this.tokenService.set(data);
 
         this.navCtrl.setRoot(HomePage,{data});
       }else{
@@ -77,7 +77,5 @@ export class LoginPage {
       alert.present();
       return;
     });
-
-
   }
 }

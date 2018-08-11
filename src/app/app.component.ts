@@ -12,7 +12,9 @@ import {DiscosPage} from "../pages/discos/discos";
 import {CierreGestionPage} from "../pages/cierre-gestion/cierre-gestion";
 import {LoginPage} from "../pages/login/login";
 import {Subscription} from "rxjs/Subscription";
-import {TokenShareProvider} from "../providers/token-share/token-share";
+import {TokenProvider} from "../providers/token/token";
+import {ResponseLogin} from "../pages/response/response-login";
+import {RecibidoPage} from "../pages/recibido/recibido";
 
 @Component({
   templateUrl: 'app.html'
@@ -28,40 +30,41 @@ export class MyApp {
   subscription: Subscription;
   jsonConvert: any;
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-              private toastCtrl:ToastController, private alertCtrl: AlertController,public tokenShare:TokenShareProvider) {
+              private toastCtrl:ToastController, private alertCtrl: AlertController,public tokenService: TokenProvider) {
     this.initializeApp();
-    this.subscription = this.tokenShare.getData().subscribe(data => {
-      if (data != null) {
-        var valor = JSON.stringify(data);
-        if (valor != null) {
-          this.toDatosPedidos(valor);
-        }
-      }
-    });
+
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Registrar Producto', component: NuevoProductoPage, icon: 'archive' },
       { title: 'Pedidos', component: PedidosPage, icon: 'boat' },
       { title: 'Entregas', component: EntregasPage, icon: 'aperture' },
+      { title: 'Recibidos', component: RecibidoPage, icon: 'hand' },
       { title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase' },
       { title: 'Reportes', component: ReportesPage, icon: 'document' },
       { title: 'Discos', component: DiscosPage, icon: 'disc' },
       { title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand' }
+
     ];
+    this.subscription = this.tokenService.getData<ResponseLogin>().subscribe(data =>{
+      if(data !=null){
+        var valor = JSON.stringify(data);
+        if(valor != null){
+          this.toDatosPedidos(valor);
+        }
+      }
+    })
 
   }
-  public toDatosPedidos(data: string) {
-    if (data != null) {
+
+  public toDatosPedidos(data: string){
+    if(data != null){
       var jsonData: any = new Object();
-      //try{
       jsonData = JSON.parse(data);
       this.jsonConvert = jsonData;
-      console.log("JSON DATA");
-
-      this.obtenerString();
+      this.obtenerString()
     }
   }
-  public obtenerString() {
+  public obtenerString(){
     this.nombreSession = this.jsonConvert.nombreUsuario;
     this.sucursalSession = this.jsonConvert.nombreAmbiente;
   }

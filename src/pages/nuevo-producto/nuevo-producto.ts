@@ -12,6 +12,10 @@ import {ResponseListArticulotr} from "../response/response-list-articulotr";
 import {ResponseGetArticuloPr} from "../response/response-get-articulo-pr";
 import {RequestProductoPatron} from "../response/response-list-articulotr";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import {environment} from "../../app/enviroment";
+import {ResponseGetArticulo} from "../response/response-get-articulo";
+import {ResponseList} from "../response/responseList";
+import {GlobalResponse} from "../response/globalResponse";
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
 /**
@@ -43,7 +47,7 @@ export class NuevoProductoPage implements OnInit {
   mostrarExistencias = false;
   respuestaExistencias:ResponseExistences = new ResponseExistences(null,true,"");
   mdlAmbiente:Ambientes[] = new Array();
-  url:string = 'http://localhost:8080';
+  url:string = environment.url;
   codBarras:string;
   classNuevo: boolean = false;
   @ViewChild('idCodigoArticulo') idCodigoArticulo;
@@ -352,48 +356,47 @@ export class NuevoProductoPage implements OnInit {
     }
     //this.presentLoadingDefault();
     this.limpiarDatos();
-    this.sicService.getArticulo(this.codigoArticulo.toUpperCase()).subscribe(
-      data => {
-        loading.dismiss();
-        //this.dimmisLoading();
+    this.sicService.getGlobal<ResponseGetArticulo>('/articulo/quest/' + this.codigoArticulo.toUpperCase()).subscribe(data=>{
+      loading.dismiss();
+      //this.dimmisLoading();
 
-        //this.respuestaArticulo = data;
-        if (data.articulo != null) {
-          this.seActualiza = true;
-          this.descripcion = data.articulo.nombre;
-          this.precioKilo = this.round(data.articulo.precioKilo,2);
-          this.pesoStock = this.round(data.articulo.peso,2);
-          this.precioZonaLibre = this.round(data.articulo.precioZonaLibre,2);
-          this.porcentajeGastos = this.round(data.articulo.porcentajeGasto,2);
-          this.precioCompra = this.round(data.articulo.precioCompra,2);
-          this.precioMercado = this.round(data.articulo.precioMercado,2);
-          this.precioVenta = this.round(data.articulo.precioVenta,2);
-          this.montoGasto = (this.porcentajeGastos * this.precioZonaLibre) / 100;
-          this.montoGasto = this.round(this.montoGasto,2);
-          this.mensaje = data.articulo.descripcion;
-          this.idDescripcion.setFocus();
-          this.sicService.getGlobal<ResponseExistences>("/inventario/articulo/"+this.codigoArticulo+"/existence").subscribe(
-            data2 => {
-              this.respuestaExistencias = data2;
-              console.log(this.respuestaExistencias.respuesta);
-              if(this.respuestaExistencias.respuesta) {
-                this.mdlAmbiente = this.respuestaExistencias.list;
-              }else{
-                this.mdlAmbiente = new Array();
-              }
+      //this.respuestaArticulo = data;
+      if (data.articulo != null) {
+        this.seActualiza = true;
+        this.descripcion = data.articulo.nombre;
+        this.precioKilo = this.round(data.articulo.precioKilo,2);
+        this.pesoStock = this.round(data.articulo.peso,2);
+        this.precioZonaLibre = this.round(data.articulo.precioZonaLibre,2);
+        this.porcentajeGastos = this.round(data.articulo.porcentajeGasto,2);
+        this.precioCompra = this.round(data.articulo.precioCompra,2);
+        this.precioMercado = this.round(data.articulo.precioMercado,2);
+        this.precioVenta = this.round(data.articulo.precioVenta,2);
+        this.montoGasto = (this.porcentajeGastos * this.precioZonaLibre) / 100;
+        this.montoGasto = this.round(this.montoGasto,2);
+        this.mensaje = data.articulo.descripcion;
+        this.idDescripcion.setFocus();
+        this.sicService.getGlobal<ResponseExistences>("/inventario/articulo/"+this.codigoArticulo+"/existence").subscribe(
+          data2 => {
+            this.respuestaExistencias = data2;
+            console.log(this.respuestaExistencias.respuesta);
+            if(this.respuestaExistencias.respuesta) {
+              this.mdlAmbiente = this.respuestaExistencias.list;
+            }else{
+              this.mdlAmbiente = new Array();
+            }
 
-            },error=>{
-              this.presentToast("Error al obtener los datos.");
-            });
-        }else{
-          console.log("ingresa articulo nulo");
-          this.mdlAmbiente = new Array();
-        }
-      },
+          },error=>{
+            this.presentToast("Error al obtener los datos.");
+          });
+      }else{
+        console.log("ingresa articulo nulo");
+        this.mdlAmbiente = new Array();
+      }
+    },
       error =>{
         loading.dismiss();
         this.presentToast("Error al obtener los datos");
-      });
+    })
   }
 
   public confirmarGuardado(fab: FabContainer){
@@ -443,50 +446,49 @@ export class NuevoProductoPage implements OnInit {
 
     }
     if (!this.seActualiza) {
-      this.sicService.addArticulo(new MdlArticulo(new ObjArticulo(this.codigoArticulo, this.descripcion,
+      this.sicService.postGlobal<GlobalResponse>(new MdlArticulo(new ObjArticulo(this.codigoArticulo, this.descripcion,
         this.mensaje, this.precioKilo, this.pesoStock, this.precioZonaLibre, this.porcentajeGastos,
-        this.montoGasto, this.precioCompra, this.precioVenta, this.precioMercado))).subscribe(
-        data => {
-          loading.dismiss();
-          //this.limpiarDatos();
-          this.presentAlert('Información','Su producto fue registrado correctamente');
-          console.log('respuesta al guardar ADD ' + data);
-          this.classNuevo = false;
-          this.buscaProducto();
-          this.mdlAmbiente = new Array();
-          return data;
-        }, error =>{
-          let alert;
-          loading.dismiss();
-          alert = this.alertCtrl.create({
-            title: 'Error',
-            subTitle: 'Error al guardar el articulo.',
-            buttons: ['Aceptar']
-          });
-          alert.present();
-          return;
+        this.montoGasto, this.precioCompra, this.precioVenta, this.precioMercado)),'/articulo/add').subscribe(data => {
+        loading.dismiss();
+        //this.limpiarDatos();
+        this.presentAlert('Información','Su producto fue registrado correctamente');
+        console.log('respuesta al guardar ADD ' + data);
+        this.classNuevo = false;
+        this.buscaProducto();
+        this.mdlAmbiente = new Array();
+        return data;
+      }, error =>{
+        let alert;
+        loading.dismiss();
+        alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: 'Error al guardar el articulo.',
+          buttons: ['Aceptar']
         });
+        alert.present();
+        return;
+      })
+
 
     } else {
-      this.sicService.updateArticulo(new MdlArticulo(new ObjArticulo(this.codigoArticulo.toUpperCase(), this.descripcion,
+      let mdlArticulo: MdlArticulo = new MdlArticulo(new ObjArticulo(this.codigoArticulo.toUpperCase(), this.descripcion,
         this.mensaje, this.precioKilo, this.pesoStock, this.precioZonaLibre, this.porcentajeGastos,
-        this.montoGasto, this.precioCompra, this.precioVenta, this.precioMercado))).subscribe(
-        data => {
-          //this.limpiarDatos();
-          loading.dismiss();
-          this.presentAlert('Información','Su producto fué actualizado correctamente');
-          return data;
-        }, error =>{
-          let alert;
-          loading.dismiss();
-          alert = this.alertCtrl.create({
-            title: 'Error',
-            subTitle: 'Error al actualizar el articulo',
-            buttons: ['Aceptar']
-          });
-          alert.present();
-          return;
+        this.montoGasto, this.precioCompra, this.precioVenta, this.precioMercado));
+      this.sicService.putGlobal<GlobalResponse>(mdlArticulo,'/articulo/update/',mdlArticulo.objetoArticulo.codigo).subscribe( data =>{
+        loading.dismiss();
+        this.presentAlert('Información','Su producto fué actualizado correctamente');
+        return data;
+      }, error =>{
+        let alert;
+        loading.dismiss();
+        alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: 'Error al actualizar el articulo',
+          buttons: ['Aceptar']
         });
+        alert.present();
+        return;
+      })
     }
   }
 
@@ -524,16 +526,16 @@ export class NuevoProductoPage implements OnInit {
     console.log(this.seActualiza);
     if (this.seActualiza) {
       console.log(this.seActualiza)
-      this.sicService.deleteArticulo(this.codigoArticulo).subscribe(
-        data => {
-          loading.dismiss();
-          this.limpiarDatos();
-          this.presentAlert('Información','Su producto fué eliminado correctamente');
-          return data;
-        }, error=>{
-          loading.dismiss();
-          this.presentToast("Error al eliminar los datos.");
-        });
+
+      this.sicService.deleteGlobal<GlobalResponse>(this.codigoArticulo,'/articulo/delete/').subscribe(data => {
+        loading.dismiss();
+        this.limpiarDatos();
+        this.presentAlert('Información','Su producto fué eliminado correctamente');
+        return data;
+      }, error => {
+        loading.dismiss();
+        this.presentToast("Error al eliminar los datos.");
+      });
     }else {
       loading.dismiss();
       this.presentToast("Error al eliminar los datos.");
@@ -565,39 +567,38 @@ export class NuevoProductoPage implements OnInit {
     loading.present();
 
 
-
-    this.sicService.listArticulos().subscribe(
-      data => {
-        loading.dismiss();
-        let alert = this.alertCtrl.create();
-        alert.setTitle('Seleccione un Item');
+    this.sicService.getGlobal<ResponseList>('/articulo/list').subscribe(data =>{
+      loading.dismiss();
+      let alert = this.alertCtrl.create();
+      alert.setTitle('Seleccione un Item');
 
 
-        for (let lista of data.lista){
-          alert.addInput({
-            type: 'radio',
-            name: 'codigo',
-            label: '' + lista.codigo + ' -- '+ lista.nombre,
-            value: lista.codigo
-          });
-        }
-
-        alert.addButton('Cancelar');
-        alert.addButton({
-          text: 'Aceptar',
-          handler: (data: any) => {
-            console.log('Datos Enviados:', data);
-            this.codigoArticulo = data;
-            this.buscaProducto();
-          }
+      for (let lista of data.lista){
+        alert.addInput({
+          type: 'radio',
+          name: 'codigo',
+          label: '' + lista.codigo + ' -- '+ lista.nombre,
+          value: lista.codigo
         });
+      }
 
-        alert.present();
-        return data;
-      },error =>{
-        loading.dismiss();
-        this.presentToast("Error al obtener los datos.");
+      alert.addButton('Cancelar');
+      alert.addButton({
+        text: 'Aceptar',
+        handler: (data: any) => {
+          console.log('Datos Enviados:', data);
+          this.codigoArticulo = data;
+          this.buscaProducto();
+        }
       });
+
+      alert.present();
+      return data;
+    },error =>{
+      loading.dismiss();
+      this.presentToast("Error al obtener los datos.");
+    })
+
   }
 
   public reportesPedidos(fab: FabContainer){

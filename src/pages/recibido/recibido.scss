@@ -1,0 +1,85 @@
+page-recibido {
+  textarea{
+    height: 94px;
+    resize: none;
+  }
+  .item-label-stacked .text-input-md, .item-label-floating .text-input-md .ion-datetime .datetime-placeholder {
+    margin-left: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .list-md {
+    margin: 0px 0 0px;
+  }
+  .label-md {
+    margin: 5px 1px 5px 0;
+  }
+  .label-md[stacked] {
+    font-size: 1.2rem;
+  }
+  .item-input .label-md, .item-select .label-md, .item-datetime .label-md {
+    color: #3c3c3c;
+  }
+
+  .datetime-md {
+    padding: 2px 0px 10px 0px;
+  }
+
+  .grid.grilla-pedidos{
+    .item-block{
+      min-height: 2.3rem !important;
+    }
+    .item-md{
+      font-size: 1.2rem !important;//todo: tamanio de fuente
+    }
+  }
+  .titulos{
+    font-size: 1.1rem !important; //todo: tamanio de fuente
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+  .remarcados{
+    background: color($colors, amarrillo-claro);
+  }
+  .grillas{//amarillo-grid
+    background: color($colors, amarillo-grid);
+  }
+  .wrap{
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+  }
+  @font-face {
+    font-family: "IconWolf";
+    src: url("../../../www/assets/fonts/i.ttf");
+  }
+  .icon-floppy-disk:before {
+    content: "\e962";
+  }
+  .grid{
+    .item-block{
+      min-height: 2.3rem !important;
+    }
+    /*.item-md{
+      font-size: 1.2rem !important;//todo: tamanio de fuente
+    }*/
+  }
+  .col {
+    padding: 3px;
+  }
+
+  .btn-list {
+    height: 2.5rem;
+    margin: 0.2rem 0.2rem;
+    width: 120px;
+    font-size: 1.2rem;
+  }
+
+  .classIncorrecto {
+    color: red;
+    font-weight: bold;
+  }
+}

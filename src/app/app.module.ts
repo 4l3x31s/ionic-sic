@@ -23,8 +23,11 @@ import {HttpModule} from "@angular/http";
 import {ModalLlegadasPage} from "../pages/modal-llegadas/modal-llegadas";
 import { DataShareProvider } from '../providers/data-share/data-share';
 import {Device} from "@ionic-native/device";
-import { TokenShareProvider } from '../providers/token-share/token-share';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import { TokenProvider } from '../providers/token/token';
+import {RecibidoPage} from "../pages/recibido/recibido";
+import {ModalEntregasPage} from "../pages/modal-entregas/modal-entregas";
+import {ModalRecibidoPage} from "../pages/modal-recibido/modal-recibido";
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
     NuevoProductoPage,
     PedidosPage,
     ReportesPage,
-    ModalLlegadasPage
+    ModalLlegadasPage,
+    RecibidoPage,
+    ModalEntregasPage,
+    ModalRecibidoPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +67,10 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
     NuevoProductoPage,
     PedidosPage,
     ReportesPage,
-    ModalLlegadasPage
+    ModalLlegadasPage,
+    RecibidoPage,
+    ModalEntregasPage,
+    ModalRecibidoPage
   ],
   providers: [
     StatusBar,
@@ -70,8 +79,8 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SicServiceProvider,
     DataShareProvider,
-    TokenShareProvider,
-    BarcodeScanner
+    BarcodeScanner,
+    TokenProvider
   ]
 })
 export class AppModule {}

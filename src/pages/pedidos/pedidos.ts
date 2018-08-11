@@ -20,6 +20,8 @@ import {DataShareProvider} from "../../providers/data-share/data-share";
 import {Subscription} from "rxjs/Subscription";
 import {RequestPedidosLista} from "../request/RequestPedidosLista";
 import {Ambientes, ResponseExistences} from "../response/response-existences";
+import {environment} from "../../app/enviroment";
+import {TokenProvider} from "../../providers/token/token";
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
 var PHE = require("print-html-element");
@@ -64,7 +66,7 @@ export class PedidosPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   precioTotalCompra: number = 0;
 
   pedidoBack: DatosPedidos;
-  url:string = 'http://localhost:8080';
+  url:string = environment.url;
 
   message: any;
   subscription: Subscription;
@@ -83,8 +85,10 @@ export class PedidosPage implements OnDestroy, OnInit, OnChanges, DoCheck {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController, private sicService: SicServiceProvider, public toastCtrl: ToastController,
-              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider) {
-
+              public alertCtrl: AlertController, public modalCtrl: ModalController, public sharedService: DataShareProvider,
+              public tokenService:TokenProvider) {
+    console.log("***********************************")
+    console.log(this.tokenService.get());
     this.subscription = this.sharedService.getData().subscribe(data => {
       if (data != null) {
         var valor = JSON.stringify(data);
@@ -93,6 +97,7 @@ export class PedidosPage implements OnDestroy, OnInit, OnChanges, DoCheck {
         }
       }
     });
+
   }
 
   ionViewDidEnter(){
