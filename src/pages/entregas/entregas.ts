@@ -763,5 +763,26 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   public deleteProduct(){
 
   }
+  public detalleLlegadas() {
+    const loading = this.loadingCtrl.create({
+      content: 'Listando Productos'
+    });
+    loading.present();
+    var urlListaProveedor = '/transferencia/envio/confirmados/list';
+    this.sicService.getGlobal<ResponseListPedidos>(urlListaProveedor).subscribe(
+      data => {
+        console.log(data);
+        loading.dismiss();
+        if (data.respuesta) {
+          this.listaPedidos = data;
+          this.navCtrl.push(ModalEntregasPage, {
+            detallePedidos: this.listaPedidos,
+            tipoPeticion: 1
+          });
+        } else {
+          this.presentToast('No se pudo recuperar los datos solicitados.');
+        }
+      });
+  }
 
 }

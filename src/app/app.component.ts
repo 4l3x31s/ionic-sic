@@ -15,6 +15,7 @@ import {Subscription} from "rxjs/Subscription";
 import {TokenProvider} from "../providers/token/token";
 import {ResponseLogin} from "../pages/response/response-login";
 import {RecibidoPage} from "../pages/recibido/recibido";
+import {VentasPage} from "../pages/ventas/ventas";
 
 @Component({
   templateUrl: 'app.html'
@@ -38,7 +39,8 @@ export class MyApp {
       { title: 'Registrar Producto', component: NuevoProductoPage, icon: 'archive' },
       { title: 'Pedidos', component: PedidosPage, icon: 'boat' },
       { title: 'Entregas', component: EntregasPage, icon: 'aperture' },
-      { title: 'Recibidos', component: RecibidoPage, icon: 'hand' },
+      { title: 'Recibidos', component: RecibidoPage, icon: 'cart' },
+      { title: 'Ventas', component: VentasPage, icon: 'cash' },
       { title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase' },
       { title: 'Reportes', component: ReportesPage, icon: 'document' },
       { title: 'Discos', component: DiscosPage, icon: 'disc' },

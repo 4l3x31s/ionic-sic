@@ -28,6 +28,8 @@ import { TokenProvider } from '../providers/token/token';
 import {RecibidoPage} from "../pages/recibido/recibido";
 import {ModalEntregasPage} from "../pages/modal-entregas/modal-entregas";
 import {ModalRecibidoPage} from "../pages/modal-recibido/modal-recibido";
+import {VentasPage} from "../pages/ventas/ventas";
+import {ModalVentaPage} from "../pages/modal-venta/modal-venta";
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import {ModalRecibidoPage} from "../pages/modal-recibido/modal-recibido";
     ModalLlegadasPage,
     RecibidoPage,
     ModalEntregasPage,
-    ModalRecibidoPage
+    ModalRecibidoPage,
+    VentasPage,
+    ModalVentaPage
   ],
   imports: [
     BrowserModule,
@@ -70,7 +74,9 @@ import {ModalRecibidoPage} from "../pages/modal-recibido/modal-recibido";
     ModalLlegadasPage,
     RecibidoPage,
     ModalEntregasPage,
-    ModalRecibidoPage
+    ModalRecibidoPage,
+    VentasPage,
+    ModalVentaPage
   ],
   providers: [
     StatusBar,
