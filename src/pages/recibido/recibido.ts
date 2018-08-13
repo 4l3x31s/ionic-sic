@@ -7,11 +7,13 @@ import {Ambientes, ResponseExistences} from "../response/response-existences";
 import {Subscription} from "rxjs/Subscription";
 import {environment} from "../../app/enviroment";
 import {ArticulosPedidosGet, DatosPedidos, ResponseListPedidos} from "../response/response-list-pedidos";
-import {ArticuloPedido, RequestPedido, ResponsePedido} from "../request/request-pedido";
+import {ArticuloPedido, Pedido, RequestPedido, ResponsePedido} from "../request/request-pedido";
 import {DataShareProvider} from "../../providers/data-share/data-share";
 import {SicServiceProvider} from "../../providers/sic-service/sic-service";
 import {ModalRecibidoPage} from "../modal-recibido/modal-recibido";
 import {TokenProvider} from "../../providers/token/token";
+import {ResponseAddPedido} from "../response/response-add-pedido";
+import {GlobalResponse} from "../response/globalResponse";
 
 var Mousetrap = require('mousetrap');
 var Mousetrap_global = require('mousetrap-global-bind');
@@ -153,7 +155,7 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   }
   ionViewDidEnter(){
     Mousetrap.bindGlobal(['command+g', 'ctrl+g'], () => {
-      //this.confirmarAccion(null)
+      this.confirmarAccion(null)
     })
     Mousetrap.bindGlobal(['command+n', 'ctrl+n'], () => {
       //this.nuevoPedido()
@@ -162,6 +164,69 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
       console.log('Imprimiendo reporte...')
       //this.generarReporte()
     })
+  }
+  public confirmarAccion(fab?: FabContainer) {
+    if(fab) {
+      fab.close();
+    }
+
+    let alert = this.alertCtrl.create({
+      title: 'Alerta de Confirmacion Operacion',
+      message: 'Está seguro de confirmar la recepcion del Movimiento: '+ this.txtNumMovimiento +' ? ',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+
+              this.crearPedido();
+
+
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  public crearPedido() {
+    const loading = this.loadingCtrl.create({
+      content: 'Listando Productos'
+    });
+    //loading.present();
+    var urlListaProveedor = '/transferencia/recibir/confirmar/recepcion/';
+    var pedido = new Pedido(null, this.txtFechaConvert, this.txtNumMovimiento, this.txtCodProveedor, this.txtDescripcion, this.listadoInPedidos);
+    var requestPedido = new RequestPedido(pedido);
+    this.sicService.putGlobal<GlobalResponse>(requestPedido, urlListaProveedor, this.idPedidoRecuperado + '').subscribe(data => {
+
+
+
+      if (data.respuesta) {
+        // this.presentToast('Se guardo el pedido correctamente.');
+        let alert = this.alertCtrl.create({
+          title: 'Pedidos',
+          subTitle: 'Se ingreso a la tienda la entrega.',
+          buttons: [{
+            text: 'Aceptar',
+            handler: () => {
+              setTimeout(() => {
+                this.idTxtProveedor.setFocus();
+              },400);
+            }
+          }]
+        });
+        alert.present();
+      } else {
+        this.presentToast(data.mensaje);
+      }
+    })
+
   }
 
   ngOnDestroy(): void {
@@ -247,7 +312,7 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
       content: 'Listando Productos'
     });
     loading.present();
-    var urlListaProveedor = '/transferencia/envio/list';
+    var urlListaProveedor = '/transferencia/recibir/porrecibir/list';
     this.sicService.getGlobal<ResponseListPedidos>(urlListaProveedor).subscribe(
       data => {
         console.log(data);

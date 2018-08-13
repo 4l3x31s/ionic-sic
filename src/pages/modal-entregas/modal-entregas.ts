@@ -53,9 +53,9 @@ export class ModalEntregasPage implements OnDestroy, OnInit {
     this.tipoPeticion = navParams.get('tipoPeticion');
 
     if(this.tipoPeticion == 0){
-      this.titulo = "Articulos Entregados"
+      this.titulo = "Por Entregar"
     }else{
-      this.titulo = "Llegada de Articulos"
+      this.titulo = "Entregas Confirmadas"
     }
     //console.log(this.listaPedidos);
   }

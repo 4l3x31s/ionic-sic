@@ -68,57 +68,7 @@
           </ion-list>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-list>
-            <ion-item #itemCodArt>
-              <ion-label stacked>Codigo Artículo</ion-label>
-              <ion-input type="text" #idCodigoArticulo
-                         [(ngModel)]="txtCodArticulo"  tabindex="6"
-                         accesskey="a"
-                         [class.classIncorrecto]="classIncorrectoPro"
-                         (ngModelChange)="txtCodArticulo = $event.toLocaleUpperCase()"></ion-input>
 
-            </ion-item>
-          </ion-list>
-        </ion-col>
-        <ion-col>
-          <ion-list>
-            <ion-item>
-              <ion-label stacked>Cantidad - Compra</ion-label>
-              <ion-input #cantidadCompra  tabindex="7" minlength="0" maxlength="10"
-                         (keypress)="formatInt($event)"
-                         (keyup.enter)="validaCantidadPermitida(cantidadCompra.value)"
-                         [(ngModel)]="txtCantidadCompra" type="number"></ion-input>
-
-            </ion-item>
-          </ion-list>
-        </ion-col>
-        <ion-col>
-          <ion-list>
-            <ion-item>
-              <ion-label stacked>Precio U.</ion-label>
-              <ion-input #idTxtPrecZonLib tabindex="8"
-                         [(ngModel)]="txtPrecZonLib" (keypress)="utilFormatNumber(idTxtPrecZonLib, 2)"
-
-                         type="number"></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-list>
-            <ion-item class="remarcados">
-              <ion-label stacked>Nombre Artículo</ion-label>
-              <ion-input disabled
-                         [(ngModel)]="txtDescripcion2"
-                         [class.classIncorrecto]="classIncorrectoPro"
-                         type="text"></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-      </ion-row>
     </ion-grid>
     <ion-row  [hidden]="!mostrarExistencias">
       <ion-row *ngFor="let item of mdlAmbiente" >
@@ -204,7 +154,7 @@
   <ion-fab bottom right #fab>
     <button ion-fab color="danger"><ion-icon name="more"></ion-icon></button>
     <ion-fab-list side="left">
-      <button ion-fab color="cafe-claro"  accesskey="g"  >
+      <button ion-fab color="cafe-claro"  accesskey="g" (click)="confirmarAccion(fab)"  >
         <img class="itm-img" src="assets/img/save.svg" />
       </button>
     </ion-fab-list>

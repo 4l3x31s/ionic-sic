@@ -367,6 +367,17 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   public validaCantidadPermitida(cantidadCompra: number) {
     if(cantidadCompra > 0 )
       this.idTxtPrecZonLib.setFocus();
+
+    for(let i = 0; i< this.respuestaExistencias.list.length;i++){
+      if(this.tokenService.get().nombreAmbiente === this.respuestaExistencias.list[i].nombreAmbiente){
+        if(this.txtCantidadCompra > this.respuestaExistencias.list[i].cantidad){
+          this.presentToast("No debe ingresar un monto mayor a: " + this.respuestaExistencias.list[i].cantidad);
+          break;
+        }
+      }
+    }
+
+
   }
 
   public keytab(event) {
