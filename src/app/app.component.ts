@@ -35,18 +35,7 @@ export class MyApp {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Registrar Producto', component: NuevoProductoPage, icon: 'archive' },
-      { title: 'Pedidos', component: PedidosPage, icon: 'boat' },
-      { title: 'Entregas', component: EntregasPage, icon: 'aperture' },
-      { title: 'Recibidos', component: RecibidoPage, icon: 'cart' },
-      { title: 'Ventas', component: VentasPage, icon: 'cash' },
-      { title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase' },
-      { title: 'Reportes', component: ReportesPage, icon: 'document' },
-      { title: 'Discos', component: DiscosPage, icon: 'disc' },
-      { title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand' }
 
-    ];
     this.subscription = this.tokenService.getData<ResponseLogin>().subscribe(data =>{
       if(data !=null){
         var valor = JSON.stringify(data);
@@ -69,6 +58,36 @@ export class MyApp {
   public obtenerString(){
     this.nombreSession = this.jsonConvert.nombreUsuario;
     this.sucursalSession = this.jsonConvert.nombreAmbiente;
+    this.validarMenu(this.jsonConvert.tipo);
+  }
+  public validarMenu(tipoUsuario:string){
+    if(tipoUsuario === 'ALMACEN') {
+      this.pages = [
+        {title: 'Registrar Producto', component: NuevoProductoPage, icon: 'archive'},
+        {title: 'Pedidos', component: PedidosPage, icon: 'boat'},
+        {title: 'Entregas', component: EntregasPage, icon: 'aperture'},
+        //{title: 'Recibidos', component: RecibidoPage, icon: 'cart'},
+        //{title: 'Ventas', component: VentasPage, icon: 'cash'},
+        {title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase'},
+        {title: 'Reportes', component: ReportesPage, icon: 'document'},
+        {title: 'Discos', component: DiscosPage, icon: 'disc'},
+        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'}
+
+      ];
+    }
+    else{
+      this.pages = [
+        //{title: 'Registrar Producto', component: NuevoProductoPage, icon: 'archive'},
+        //{title: 'Entregas', component: EntregasPage, icon: 'aperture'},
+        {title: 'Recibidos', component: RecibidoPage, icon: 'cart'},
+        {title: 'Ventas', component: VentasPage, icon: 'cash'},
+        {title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase'},
+        {title: 'Reportes', component: ReportesPage, icon: 'document'},
+        {title: 'Discos', component: DiscosPage, icon: 'disc'},
+        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'}
+
+      ];
+    }
   }
 
   initializeApp() {

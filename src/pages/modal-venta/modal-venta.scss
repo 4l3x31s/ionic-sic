@@ -1,3 +1,99 @@
 page-modal-venta {
+  textarea{
+    height: 112px;
+    resize: none;
+  }
+  .item-label-stacked .text-input-md, .item-label-floating .text-input-md{
+    margin-left: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .list-md {
+    margin: 0px 0 0px;
+  }
+  .label-md {
+    margin: 5px 1px 5px 0;
+  }
+  /*.label-md[stacked] {
+    font-size: 1.4rem;
+  }*/
+  .item-input .label-md, .item-select .label-md, .item-datetime .label-md {
+    color: #3c3c3c;
+  }
+  .grid.grilla-pedidos{
+    .item-block{
+      min-height: 2.3rem !important;
+    }
+    /*.item-md{
+      font-size: 1.4rem !important;
+    }*/
+  }
+  .titulos{
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
 
+  ion-row.seleccionado:hover {
+    background: color($colors, cafe-suave);
+    ion-item {
+      background: color($colors, cafe-suave);
+    }
+  }
+
+  .row_seleccionado {
+    color: #1569ff;
+  }
+
+  .grid {
+    padding: 0px;
+  }
+  .scroll-content {
+    padding: 0px 16px !important;
+  }
+  .grillas{//amarillo-grid
+    background: color($colors, amarillo-grid);
+    width: 100% !important;
+  }
+  .remarcados{
+    background: color($colors, amarrillo-claro);
+  }
+  .wrap{
+    //white-space: pre-wrap;
+    //white-space: -moz-pre-wrap;
+    //white-space: -pre-wrap;
+    //white-space: -o-pre-wrap;
+    //word-wrap: break-word;
+    /*
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;*/
+
+  }
+
+  .estilizado{
+    font-weight: bold !important;
+    text-decoration: underline !important;
+  }
+  .mostrarObservacion{
+    //width: 25%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .col{
+    width: 20% !important;
+    padding:3px;
+  }
+  .text-input-md{
+    margin: 0px 8px !important;
+  }
+
+  .md [padding] {
+    padding: 1px !important;
+  }
+  .list-md[inset] {
+    margin: 1px !important;
+    border-radius: 2px;
+  }
 }
