@@ -795,5 +795,71 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
         }
       });
   }
+  public eliminarPedidoLlegado(){
+    let alert = this.alertCtrl.create({
+      title: 'Confirmar',
+      message: 'Está seguro que quiere realizar la operación?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            if (this.idPedidoRecuperado === 0) {
+              let mostrarAlert = this.alertCtrl.create({
+                title: 'Error',
+                subTitle: 'Debe seleccionar un pedido.',
+                buttons: ['Aceptar']
+              });
+              mostrarAlert.present();
+              return;
+            }
 
+            const loading = this.loadingCtrl.create({
+              content: 'Obteniendo los datos'
+            });
+            loading.present();
+            var id = this.idPedidoRecuperado + '';
+            console.log(id);
+            var url = '/transferencia/envio/delete/';
+            this.sicService.deleteGlobal<GlobalResponse>(id,url).subscribe(data => {
+              loading.dismiss();
+              let alert;
+              if (data.respuesta) {
+
+                alert = this.alertCtrl.create({
+                  title: 'Pedidos',
+                  subTitle: 'El pedido ha sido eliminado correctamente.',
+                  buttons: [{
+                    text: 'Aceptar',
+                    handler: () => {
+
+                      this.detalleLlegadas();
+
+                    }
+                  }]
+                });
+                alert.present();
+
+              } else {
+                alert = this.alertCtrl.create({
+                  title: 'Ups',
+                  subTitle: data.mensaje,
+                  buttons: ['Aceptar']
+                });
+                alert.present();
+                return;
+              }
+            });
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {
   ActionSheetController,
   AlertController,
@@ -10,7 +10,6 @@ import {GlobalResponse} from "../response/globalResponse";
 import {DataShareProvider} from "../../providers/data-share/data-share";
 import { Location } from '@angular/common';
 import {Subscription} from "rxjs/Subscription";
-import {environment} from "../../app/enviroment";
 
 /**
  * Generated class for the ModalLlegadasPage page.
@@ -24,7 +23,7 @@ import {environment} from "../../app/enviroment";
   selector: 'page-modal-llegadas',
   templateUrl: 'modal-llegadas.html',
 })
-export class ModalLlegadasPage implements OnDestroy, OnInit {
+export class ModalLlegadasPage implements OnDestroy {
 
 
   listaPedidos: ResponseListPedidos;
@@ -43,7 +42,7 @@ export class ModalLlegadasPage implements OnDestroy, OnInit {
   tipoPeticion :number;
   titulo: string;
   strDetallePedidos: string;
-  url:string = environment.url;
+  url:string = 'http://localhost:8080';
   subscription: Subscription;
   txtBuscaArticulo:string;
 
@@ -536,12 +535,12 @@ export class ModalLlegadasPage implements OnDestroy, OnInit {
   public filtrarPorObservacion(datosPedido:string){
 
 
-      let alert = this.alertCtrl.create({
-        title: 'Observacion',
-        subTitle: datosPedido,
-        buttons: ['Aceptar']
-      });
-      alert.present();
+    let alert = this.alertCtrl.create({
+      title: 'Observacion',
+      subTitle: datosPedido,
+      buttons: ['Aceptar']
+    });
+    alert.present();
 
 
     /*let listaPedidosLocal:DatosPedidos[];

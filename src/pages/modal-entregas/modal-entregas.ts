@@ -274,8 +274,8 @@ export class ModalEntregasPage implements OnDestroy, OnInit {
             loading.present();
             var id = this.idPedido + '';
             console.log(id);
-            var url = '/pedido/llegada/cancelar/';
-            this.sicService.putGlobal<GlobalResponse>(null,url,id).subscribe(data => {
+            var url = '/transferencia/envio/delete/';
+            this.sicService.deleteGlobal<GlobalResponse>(id,url).subscribe(data => {
               loading.dismiss();
               let alert;
               if (data.respuesta) {
