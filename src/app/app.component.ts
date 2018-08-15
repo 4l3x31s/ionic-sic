@@ -71,7 +71,8 @@ export class MyApp {
         {title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase'},
         {title: 'Reportes', component: ReportesPage, icon: 'document'},
         {title: 'Discos', component: DiscosPage, icon: 'disc'},
-        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'}
+        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'},
+        {title: 'Salir Sesion', component: LoginPage, icon: 'exit'}
 
       ];
     }
@@ -84,8 +85,8 @@ export class MyApp {
         {title: 'Estado Cuentas', component: EstadoCuentasPage, icon: 'briefcase'},
         {title: 'Reportes', component: ReportesPage, icon: 'document'},
         {title: 'Discos', component: DiscosPage, icon: 'disc'},
-        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'}
-
+        {title: 'Cierre Gestión', component: CierreGestionPage, icon: 'hand'},
+        {title: 'Salir Sesion', component: LoginPage, icon: 'exit'}
       ];
     }
   }

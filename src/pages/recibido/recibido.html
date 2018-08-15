@@ -31,8 +31,8 @@
             </ion-item>
             <ion-item>
               <ion-label stacked>Fecha de Movimiento</ion-label>
-              <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="txtFechaConvert"
-                            tabindex="3"></ion-datetime>
+              <ion-input [(ngModel)]="txtFechaConvert"
+                            tabindex="3" readonly></ion-input>
             </ion-item>
             <ion-item>
               <ion-label stacked>Código Proveedor</ion-label>
@@ -126,9 +126,9 @@
             <ion-label stacked>{{item.precio}}</ion-label>
           </ion-item>
         </ion-col>
-        <ion-col (click)="eliminarArticuloPedido(item)">
+        <ion-col >
           <ion-item class="grillas" class="wrap">
-            <ion-label stacked>{{(item.cantidad * item.precio).toFixed(2)}} <ion-icon name="trash"></ion-icon></ion-label>
+            <ion-label stacked>{{(item.cantidad * item.precio).toFixed(2)}} </ion-label>
           </ion-item>
         </ion-col>
       </ion-row>

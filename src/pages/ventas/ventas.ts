@@ -49,8 +49,8 @@ export class VentasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   txtPrecZonLib: number = null;
   txtNomProveedor;
   txtDescripcion2;
-  txtCantidadTotal;
-  txtPrecioTotal;
+  txtCantidadTotal: number = 0;
+  txtPrecioTotal: number = 0;
   convertedDate = '';
   txtFechaConvert;
   listadoInPedidos: ArticuloPedido[];
@@ -524,9 +524,9 @@ export class VentasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
           }
         },
         {
-          text: 'Nuevo Proveedor',
+          text: 'Nuevo Cliente',
           handler: () => {
-            console.log('Nuevo Proveedor');
+            console.log('Nuevo Cliente');
             this.presentPrompt();
           }
         }, {
@@ -874,6 +874,15 @@ export class VentasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   public validaCantidadPermitida(cantidadCompra: number) {
     if(cantidadCompra > 0 )
       this.idTxtPrecZonLib.setFocus();
+
+    for(let i = 0; i< this.respuestaExistencias.list.length;i++){
+      if(this.tokenService.get().nombreAmbiente === this.respuestaExistencias.list[i].nombreAmbiente){
+        if(this.txtCantidadCompra > this.respuestaExistencias.list[i].cantidad){
+          this.presentToast("No debe ingresar un monto mayor a: " + this.respuestaExistencias.list[i].cantidad);
+          break;
+        }
+      }
+    }
   }
 
   public formatInt(event: any) {
@@ -1052,7 +1061,7 @@ export class VentasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
 
   public presentPrompt() {
     let alert = this.alertCtrl.create({
-      title: 'Nuevo Proveedor',
+      title: 'Nuevo Cliente',
       inputs: [
         {
           name: 'codigo',
@@ -1087,7 +1096,9 @@ export class VentasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
             });
             loading.present();
             var urlListaProveedor = '/ventas/cliente/add';
-            var requestPedido: RequestProveedor;
+            console.log("Datos Clientes")
+            console.log(data)
+            var requestPedido: RequestProveedor = new RequestProveedor(data.codigo,data.nombre,data.direccion,data.telefono);
             requestPedido.codigo = data.codigo;
             requestPedido.nombre = data.nombre;
             requestPedido.direccion = data.direccion;

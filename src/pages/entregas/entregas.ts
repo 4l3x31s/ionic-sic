@@ -376,8 +376,6 @@ export class EntregasPage implements OnDestroy, OnInit, OnChanges, DoCheck {
         }
       }
     }
-
-
   }
 
   public keytab(event) {

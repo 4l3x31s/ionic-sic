@@ -43,8 +43,8 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
   txtPrecZonLib: number = null;
   txtNomProveedor;
   txtDescripcion2;
-  txtCantidadTotal;
-  txtPrecioTotal;
+  txtCantidadTotal: number = 0;
+  txtPrecioTotal: number = 0;
   convertedDate = '';
   txtFechaConvert;
   listadoInPedidos: ArticuloPedido[];
@@ -105,9 +105,12 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
     }
   }
   public obtenerString() {
+    console.log("Ingresa aca 0")
     if(this.jsonConvert.id == 0){
       this.iniciarNuevoPedido();
     }else {
+      console.log("Ingresa aca")
+      console.log(this.jsonConvert)
       this.idPedidoRecuperado = this.jsonConvert.id;
       this.txtFechaConvert = this.jsonConvert.fechaMovimiento;
       this.txtNumMovimiento = this.jsonConvert.nroMovimiento;
@@ -117,9 +120,11 @@ export class RecibidoPage implements OnDestroy, OnInit, OnChanges, DoCheck {
       this.listadoInPedidos = [];
       for (let articulo of this.jsonConvert.lista) {
         this.listadoInPedidos.push(new ArticuloPedido(articulo.id, articulo.codigoArticulo, articulo.cantidad, articulo.precio, articulo.observacion));
-
+        console.log("Cantidad: " + articulo.cantidad);
         this.txtCantidadTotal = (this.txtCantidadTotal * 1) + (articulo.cantidad * 1);
+        console.log("Cantidad Total:" + this.txtCantidadTotal)
         this.txtPrecioTotal = (articulo.cantidad * articulo.precio) + (this.txtPrecioTotal * 1);
+        console.log("Precio Total:" + this.txtPrecioTotal)
       }
       this.listadoInPedidos = this.listadoInPedidos.reverse();
     }

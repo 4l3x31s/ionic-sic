@@ -1087,8 +1087,11 @@ export class PedidosPage implements OnDestroy, OnInit, OnChanges, DoCheck {
               content: 'Listando Productos'
             });
             loading.present();
-            var urlListaProveedor = '/pedido/proveedor/alta';
-            var requestPedido: RequestProveedor;
+            var urlListaProveedor = '/pedido/proveedor/add';
+            console.log("Datos Clientes")
+            console.log(data)
+            var requestPedido: RequestProveedor = new RequestProveedor(data.codigo,data.nombre,data.direccion,data.telefono);
+
             requestPedido.codigo = data.codigo;
             requestPedido.nombre = data.nombre;
             requestPedido.direccion = data.direccion;
